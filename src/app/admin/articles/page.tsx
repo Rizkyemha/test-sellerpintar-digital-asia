@@ -1,9 +1,8 @@
 import { AdminTopNav } from "@/src/components/section/admin/topNav";
+import { articles } from "./articles";
+import { columns } from "./columns";
+import { DataTable } from "./data-table";
+
 export default function Articles() {
-	return (
-		<div className='grid grid-cols-1 min-h-svh w-full bg-gray-100'>
-			<AdminTopNav title='Articles' />
-			<div>ITEM</div>
-		</div>
-	);
+	return <DataTable columns={columns} data={articles} />;
 }
