@@ -5,6 +5,7 @@ export interface GetArticlesParams {
 	category?: string;
 	page?: number;
 	limit?: number;
+	sortOrder?: string;
 }
 
 export interface CreateArticlePayload {

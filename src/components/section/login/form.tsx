@@ -9,8 +9,8 @@ import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
 import { Label } from "@/src/components/ui/label";
 import { Visibility } from "@/src/components/ui/visibility";
-import { LoginSchema, TLoginSchema } from "@/src/lib/schemas"; // Asumsi TLoginSchema diexport dari Zod
-import { login } from "@/src/services/login"; // Impor fungsi login Anda
+import { LoginSchema, TLoginSchema } from "@/src/lib/schemas";
+import { login } from "@/src/services/login";
 
 export function LoginForm() {
 	const [isVisible, setIsVisible] = React.useState(false);

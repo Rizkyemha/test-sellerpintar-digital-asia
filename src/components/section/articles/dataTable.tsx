@@ -1,9 +1,7 @@
 import {
-	ColumnDef,
 	flexRender,
 	getCoreRowModel,
 	useReactTable,
-	getPaginationRowModel,
 } from "@tanstack/react-table";
 
 import {
@@ -30,29 +28,45 @@ import { Button } from "@/src/components/ui/button";
 import { Search } from "lucide-react";
 import { Plus } from "lucide-react";
 
-import { cn } from "@/src/lib/utils";
 import Link from "next/link";
+import React from "react";
 
-interface DataTableProps<TData, TValue> {
-	columns: ColumnDef<TData, TValue>[];
-	data: TData[];
-}
+import { DataTableProps } from "@/src/lib/schemas";
 
 export function DataTable<TData, TValue>({
 	columns,
 	data,
+	categories,
+	isLoading,
+	pageCount,
+	pagination,
+	setPagination,
+	searchQuery,
+	setSearchQuery,
+	selectedCategory,
+	setSelectedCategory,
+	totalArticles,
 }: DataTableProps<TData, TValue>) {
 	const table = useReactTable({
 		data,
 		columns,
 		getCoreRowModel: getCoreRowModel(),
-		getPaginationRowModel: getPaginationRowModel(),
+		manualPagination: true,
+		pageCount: pageCount,
+		state: {
+			pagination,
+		},
+		onPaginationChange: setPagination,
 	});
+
+	const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setSearchQuery(e.target.value);
+	};
 
 	return (
 		<>
 			<p className='w-full p-[24px] border-b bg-white border-slate/200'>
-				Total Articles : {table.getRowModel().rows.length}
+				Total Articles : {totalArticles}
 			</p>
 			<div className='flex justify-between w-full p-[24px] bg-white border-b border-slate/200'>
 				<div className='flex gap-[8px]'>
@@ -60,14 +74,22 @@ export function DataTable<TData, TValue>({
 						<Label className='hidden' htmlFor='category'>
 							""
 						</Label>
-						<Select name='category'>
+						<Select
+							name='category'
+							value={selectedCategory}
+							onValueChange={(value) =>
+								setSelectedCategory(value === "all" ? "" : value)
+							}>
 							<SelectTrigger className='w-[109px] bg-slate-50 border-slate/200'>
 								<SelectValue placeholder='Category' />
 							</SelectTrigger>
 							<SelectContent>
-								<SelectItem value='admin'>Admin</SelectItem>
-								<SelectItem value='user'>User</SelectItem>
-								<SelectItem value='cihu'>cihui</SelectItem>
+								<SelectItem value='all'>All Categories</SelectItem>
+								{categories.map((item, index) => (
+									<SelectItem value={item.id} key={index}>
+										{item.name}
+									</SelectItem>
+								))}
 							</SelectContent>
 						</Select>
 					</div>
@@ -79,6 +101,8 @@ export function DataTable<TData, TValue>({
 							name='search'
 							type='text'
 							placeholder='Search by title....'
+							value={searchQuery}
+							onChange={handleSearchChange}
 						/>
 						<Search
 							className='absolute left-2 top-1/2 -translate-y-1/2 opacity-50 hover:opacity-100 hover:cursor-pointer'
@@ -117,7 +141,13 @@ export function DataTable<TData, TValue>({
 					))}
 				</TableHeader>
 				<TableBody>
-					{table.getRowModel().rows?.length ? (
+					{isLoading ? (
+						<TableRow>
+							<TableCell
+								colSpan={columns.length}
+								className='h-[843px]'></TableCell>
+						</TableRow>
+					) : table.getRowModel().rows?.length ? (
 						table.getRowModel().rows.map((row) => (
 							<TableRow
 								className='grid grid-cols-5'
@@ -126,7 +156,7 @@ export function DataTable<TData, TValue>({
 								{row.getVisibleCells().map((cell) => (
 									<TableCell
 										key={cell.id}
-										className='w-full py-[12px] px-[16px] justify-center bg-gray-50'>
+										className='w-full py-[12px] px-[16px] justify-center bg-gray-50 border-b-[1px]'>
 										{flexRender(
 											cell.column.columnDef.cell,
 											cell.getContext()
@@ -146,7 +176,7 @@ export function DataTable<TData, TValue>({
 					)}
 				</TableBody>
 			</Table>
-			<div className='flex items-center justify-end space-x-2 py-4'>
+			<div className='flex items-center justify-center space-x-2 py-4 bg-gray-50'>
 				<Button
 					variant='outline'
 					size='sm'

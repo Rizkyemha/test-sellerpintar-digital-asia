@@ -1,7 +1,8 @@
 import { apiClient } from "@/src/services";
 
 export interface GetCategoriesParams {
-	title?: string;
+	search?: string;
+	limit?: number;
 	page?: number;
 }
 
@@ -12,7 +13,13 @@ export interface CategoryPayload {
 export const getCategories = async (params: GetCategoriesParams = {}) => {
 	try {
 		const response = await apiClient.get("/categories", { params });
-		return response.data;
+		const categoriesList = response?.data?.data;
+		const filteredList = categoriesList.filter(
+			(category: { id: string }) => category.id && category.id !== ""
+		);
+		return {
+			data: filteredList,
+		};
 	} catch (error) {
 		console.error("Gagal mengambil daftar kategori:", error);
 		throw error;

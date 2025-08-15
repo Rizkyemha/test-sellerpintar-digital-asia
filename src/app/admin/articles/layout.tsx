@@ -8,7 +8,7 @@ export default function RootLayout({
 	return (
 		<div className='grid grid-cols-1 auto-rows-min min-h-svh w-full bg-gray-100'>
 			<AdminTopNav title='Articles' />
-			<div className='px-[24px] pt-[24px]'>
+			<div className='px-[24px] pt-[24px] mb-[24px]'>
 				<div className='overflow-hidden rounded-md border border-slate/200'>
 					{children}
 				</div>

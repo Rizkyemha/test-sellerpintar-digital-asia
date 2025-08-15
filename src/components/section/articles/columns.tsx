@@ -15,23 +15,30 @@ import { Button } from "@/src/components/ui/button";
 
 import { ColumnDef } from "@tanstack/react-table";
 
-import { articles, Articles } from "./articles";
+import { Article } from "@/src/lib/schemas";
 
 import { formatDate } from "@/src/lib/utils";
 import Link from "next/link";
 
-export const columns: ColumnDef<Articles>[] = [
+export const columns: ColumnDef<Article>[] = [
 	{
 		accessorKey: "thumbnailUrl",
 		header: "Thubmnail",
 		cell: ({ row }) => {
+			const imageUrl = row.original.imageUrl;
 			return (
 				<div className='flex items-center overflow-hidden w-[60px] h-[60px]'>
-					<img
-						className='w-full h-full object-cover'
-						src={row.original.thumbnailUrl}
-						alt={row.original.title}
-					/>
+					{imageUrl ? (
+						<img
+							width={60}
+							height={60}
+							className='w-full h-full object-cover'
+							src={imageUrl}
+							alt={row.original.title}
+						/>
+					) : (
+						<span className='text-xs text-gray-500'>No Image</span>
+					)}
 				</div>
 			);
 		},
@@ -48,7 +55,7 @@ export const columns: ColumnDef<Articles>[] = [
 		},
 	},
 	{
-		accessorKey: "category",
+		accessorKey: "category.name",
 		header: "Category",
 	},
 	{
@@ -107,7 +114,9 @@ export const columns: ColumnDef<Articles>[] = [
 								<AlertDialogCancel className='hover:cursor-pointer'>
 									Cancel
 								</AlertDialogCancel>
-								<AlertDialogAction className='bg-red-600 hover:cursor-pointer'>
+								<AlertDialogAction
+									// onClick={() => handleDelete(row.original.id)}
+									className='bg-red-600 hover:cursor-pointer'>
 									Continue
 								</AlertDialogAction>
 							</AlertDialogFooter>

@@ -1,4 +1,8 @@
+import { Dispatch, SetStateAction } from "react";
 import { z } from "zod";
+import { ColumnDef, PaginationState } from "@tanstack/react-table";
+
+// AUTH
 
 export const ROLES = ["Admin", "User"];
 
@@ -25,3 +29,35 @@ export const LoginSchema = z.object({
 });
 
 export type TLoginSchema = z.infer<typeof LoginSchema>;
+
+// ARTICLES
+
+export type Article = {
+	id: string;
+	imageUrl: string;
+	title: string;
+	createdAt: string;
+	category: { name: string; id: string };
+};
+
+export interface DataTableProps<TData, TValue> {
+	columns: ColumnDef<TData, TValue>[];
+	data: TData[];
+	categories: Category[];
+	isLoading: boolean;
+	pageCount: number;
+	pagination: PaginationState;
+	setPagination: Dispatch<SetStateAction<PaginationState>>;
+	searchQuery: string;
+	setSearchQuery: (query: string) => void;
+	selectedCategory: string;
+	setSelectedCategory: (category: string) => void;
+	totalArticles: number;
+}
+
+// CATEGORIES
+
+export type Category = {
+	id: string;
+	name: string;
+};
