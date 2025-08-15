@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const ROLES = ["admin", "user"];
+export const ROLES = ["Admin", "User"];
 
 export const RegisterSchema = z.object({
 	username: z
@@ -17,7 +17,11 @@ export const RegisterSchema = z.object({
 	}),
 });
 
+export type TRegisterSchema = z.infer<typeof RegisterSchema>;
+
 export const LoginSchema = z.object({
 	username: z.string(),
 	password: z.string(),
 });
+
+export type TLoginSchema = z.infer<typeof LoginSchema>;

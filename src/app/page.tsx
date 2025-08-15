@@ -1,7 +1,15 @@
-export default function Home() {
-	return (
-		<div className='font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20'>
-			<div className='text-[80px]'>Ini root</div>
-		</div>
-	);
+"use client";
+
+import { redirect } from "next/navigation";
+
+import { useAuth } from "@/src/context/auth";
+
+export default function RootPage() {
+	const { userRole } = useAuth();
+
+	if (userRole === "Admin") {
+		redirect("/admin/articles");
+	} else {
+		redirect("/articles");
+	}
 }

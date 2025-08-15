@@ -1,112 +1,94 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
 import { Label } from "@/src/components/ui/label";
-
 import { Visibility } from "@/src/components/ui/visibility";
+import { LoginSchema, TLoginSchema } from "@/src/lib/schemas"; // Asumsi TLoginSchema diexport dari Zod
+import { login } from "@/src/services/login"; // Impor fungsi login Anda
 
-import { LoginSchema } from "@/src/lib/schemas";
+export function LoginForm() {
+	const [isVisible, setIsVisible] = React.useState(false);
 
-type LoginFormError = {
-	username?: string[];
-	password?: string[];
-	role?: string[];
-};
-
-export function LoginForm({
-	className,
-	...props
-}: React.ComponentProps<"div">) {
-	const [formData, setFormData] = useState({
-		username: "",
-		password: "",
-		role: "",
+	const {
+		register,
+		handleSubmit,
+		formState: { errors, isSubmitting },
+	} = useForm<TLoginSchema>({
+		resolver: zodResolver(LoginSchema),
 	});
 
-	const [errors, setErrors] = useState({} as LoginFormError);
+	const onSubmit: SubmitHandler<TLoginSchema> = async (data) => {
+		try {
+			await login({ username: data.username, password: data.password });
 
-	const [isVisible, setIsVisible] = useState(false);
-
-	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const { name, value } = e.target;
-		setFormData((prev) => ({ ...prev, [name]: value }));
-	};
-
-	const handleSubmit = (e: React.FormEvent) => {
-		e.preventDefault();
-		setErrors({});
-
-		const validationResult = LoginSchema.safeParse(formData);
-
-		if (!validationResult.success) {
-			const formattedErrors = validationResult.error.flatten().fieldErrors;
-			setErrors(formattedErrors);
+			window.location.href = "/";
+		} catch (error) {
+			console.error("Login gagal:", error);
+			alert("Username atau password salah!");
 		}
-
-		alert("Form submitted!");
-	};
-
-	const toggleVisibility = (e: React.MouseEvent) => {
-		e.preventDefault();
-		setIsVisible(!isVisible);
 	};
 
 	return (
-		<form onSubmit={handleSubmit} noValidate className='flex flex-col gap-6'>
+		<form
+			onSubmit={handleSubmit(onSubmit)}
+			noValidate
+			className='flex flex-col gap-6'>
 			<div className='flex flex-col gap-3'>
 				<div className='grid gap-2'>
 					<Label htmlFor='username'>Username</Label>
 					<Input
 						id='username'
-						name='username'
 						type='text'
 						placeholder='Input username'
-						value={formData.username}
-						onChange={handleInputChange}
+						{...register("username")}
 					/>
 					{errors.username && (
-						<p style={{ color: "red" }}>{errors.username[0]}</p>
+						<p className='text-sm text-red-600'>
+							{errors.username.message}
+						</p>
 					)}
 				</div>
 				<div className='grid gap-2'>
-					<div className='flex items-center'>
-						<Label htmlFor='password'>Password</Label>
-					</div>
+					<Label htmlFor='password'>Password</Label>
 					<div className='relative'>
 						<Input
 							id='password'
-							name='password'
-							className='w-full'
 							type={isVisible ? "text" : "password"}
 							placeholder='Input password'
-							value={formData.password}
-							onChange={handleInputChange}
+							{...register("password")}
 						/>
 						<Visibility
-							className='absolute right-2 top-1/2 -translate-y-1/2 opacity-50 hover:opacity-100 hover:cursor-pointer'
+							className='absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer opacity-50 hover:opacity-100'
 							visible={isVisible}
-							toggleVisibility={toggleVisibility}
+							toggleVisibility={() => setIsVisible(!isVisible)}
 							size={20}
 						/>
 					</div>
 					{errors.password && (
-						<p style={{ color: "red" }}>{errors.password[0]}</p>
+						<p className='text-sm text-red-600'>
+							{errors.password.message}
+						</p>
 					)}
 				</div>
 			</div>
 			<div className='flex flex-col gap-3'>
-				<Button type='submit' className='w-full bg-blue-600'>
-					Login
+				<Button
+					type='submit'
+					disabled={isSubmitting}
+					className='w-full bg-blue-600'>
+					{isSubmitting ? "Logging in..." : "Login"}
 				</Button>
 			</div>
 			<div className='text-center text-sm'>
 				Don&apos;t have an account?{" "}
 				<Link
-					href='register'
+					href='/register'
 					className='underline underline-offset-4 text-blue-600'>
 					Register
 				</Link>

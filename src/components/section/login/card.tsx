@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { LoginForm } from "./form";
 import { Logo } from "@/src/components/logo";

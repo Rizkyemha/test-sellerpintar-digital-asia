@@ -72,12 +72,18 @@ export const columns: ColumnDef<Articles>[] = [
 					<Button
 						variant='link'
 						className='px-0 underline hover:cursor-pointer'>
-						<Link href={`/articles/${row.original.id}`}>Preview</Link>
+						<Link
+							className='text-blue-500'
+							href={`/articles/${row.original.id}`}>
+							Preview
+						</Link>
 					</Button>
 					<Button
 						variant='link'
 						className='px-0 underline hover:cursor-pointer'>
-						<Link href={`/admin/articles/edit/${row.original.id}`}>
+						<Link
+							className='text-blue-500'
+							href={`/admin/articles/edit/${row.original.id}`}>
 							Edit
 						</Link>
 					</Button>

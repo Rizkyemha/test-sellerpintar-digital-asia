@@ -1,3 +1,4 @@
+"use client";
 import { Logo } from "@/src/components/logo";
 import Link from "next/link";
 
@@ -12,11 +13,20 @@ import {
 	AlertDialogTitle,
 	AlertDialogTrigger,
 } from "@/src/components/ui/alert-dialog";
-import { Button } from "@/src/components/ui/button";
 
 import { Newspaper, Tag, LogOut } from "lucide-react";
 
+import { useAuth } from "@/src/context/auth";
+import { logout as logoutUser } from "@/src/services/login";
+
 export function AdminNav() {
+	const { setIsAuthenticated } = useAuth();
+	const logoutHandler = (e: React.MouseEvent) => {
+		e.preventDefault();
+		logoutUser();
+		setIsAuthenticated(false);
+	};
+
 	return (
 		<div className='box-content w-[267px] bg-blue-600 flex flex-col gap-[24px] px-[24px] pt-[24px] pb-[16px]'>
 			<Logo white className='pl-[16px] w-[134px] box-content' />
@@ -51,8 +61,10 @@ export function AdminNav() {
 							<AlertDialogCancel className='hover:cursor-pointer'>
 								Cancel
 							</AlertDialogCancel>
-							<AlertDialogAction className='bg-blue-600 hover:cursor-pointer'>
-								<Link href='/login'>Logout</Link>
+							<AlertDialogAction
+								onClick={logoutHandler}
+								className='bg-blue-600 hover:cursor-pointer'>
+								Logout
 							</AlertDialogAction>
 						</AlertDialogFooter>
 					</AlertDialogContent>

@@ -1,7 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useForm, SubmitHandler, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
 	Select,
@@ -10,135 +13,124 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/src/components/ui/select";
-
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
 import { Label } from "@/src/components/ui/label";
-
 import { Visibility } from "@/src/components/ui/visibility";
 
-import { RegisterSchema, ROLES } from "@/src/lib/schemas";
+import { RegisterSchema, TRegisterSchema, ROLES } from "@/src/lib/schemas";
+import { register as registerUser } from "@/src/services/login";
 
-type RegisterFormError = {
-	username?: string[];
-	password?: string[];
-	role?: string[];
-};
+export function RegisterForm() {
+	const router = useRouter();
+	const [isVisible, setIsVisible] = React.useState(false);
 
-export function RegisterForm({
-	className,
-	...props
-}: React.ComponentProps<"div">) {
-	const [formData, setFormData] = useState({
-		username: "",
-		password: "",
-		role: "",
+	const {
+		register,
+		handleSubmit,
+		control,
+		formState: { errors, isSubmitting },
+	} = useForm<TRegisterSchema>({
+		resolver: zodResolver(RegisterSchema),
 	});
 
-	const [errors, setErrors] = useState({} as RegisterFormError);
-
-	const [isVisible, setIsVisible] = useState(false);
-
-	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const { name, value } = e.target;
-		setFormData((prev) => ({ ...prev, [name]: value }));
-	};
-
-	const handleRoleChange = (value: string) => {
-		setFormData((prev) => ({
-			...prev,
-			role: value,
-		}));
-	};
-
-	const handleSubmit = (e: React.FormEvent) => {
-		e.preventDefault();
-		setErrors({});
-
-		const validationResult = RegisterSchema.safeParse(formData);
-
-		if (!validationResult.success) {
-			const formattedErrors = validationResult.error.flatten().fieldErrors;
-			setErrors(formattedErrors);
+	const onSubmit: SubmitHandler<TRegisterSchema> = async (data) => {
+		try {
+			await registerUser(data);
+			alert("Registrasi berhasil! Silakan login.");
+			router.push("/login");
+		} catch (error) {
+			console.error("Registrasi gagal:", error);
+			alert("Registrasi gagal. Coba lagi.");
 		}
-
-		alert("Form submitted!");
-	};
-
-	const toggleVisibility = (e: React.MouseEvent) => {
-		e.preventDefault();
-		setIsVisible(!isVisible);
 	};
 
 	return (
-		<form onSubmit={handleSubmit} noValidate className='flex flex-col gap-6'>
+		<form
+			onSubmit={handleSubmit(onSubmit)}
+			noValidate
+			className='flex flex-col gap-6'>
 			<div className='flex flex-col gap-3'>
+				{/* Field Username */}
 				<div className='grid gap-2'>
 					<Label htmlFor='username'>Username</Label>
 					<Input
 						id='username'
-						name='username'
 						type='text'
 						placeholder='Input username'
-						value={formData.username}
-						onChange={handleInputChange}
+						{...register("username")}
 					/>
 					{errors.username && (
-						<p style={{ color: "red" }}>{errors.username[0]}</p>
+						<p className='text-sm text-red-600'>
+							{errors.username.message}
+						</p>
 					)}
 				</div>
+
+				{/* Field Password */}
 				<div className='grid gap-2'>
-					<div className='flex items-center'>
-						<Label htmlFor='password'>Password</Label>
-					</div>
+					<Label htmlFor='password'>Password</Label>
 					<div className='relative'>
 						<Input
 							id='password'
-							name='password'
-							className='w-full'
 							type={isVisible ? "text" : "password"}
 							placeholder='Input password'
-							value={formData.password}
-							onChange={handleInputChange}
+							{...register("password")}
 						/>
 						<Visibility
-							className='absolute right-2 top-1/2 -translate-y-1/2 opacity-50 hover:opacity-100 hover:cursor-pointer'
+							className='absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer opacity-50 hover:opacity-100'
 							visible={isVisible}
-							toggleVisibility={toggleVisibility}
+							toggleVisibility={() => setIsVisible(!isVisible)}
 							size={20}
 						/>
 					</div>
 					{errors.password && (
-						<p style={{ color: "red" }}>{errors.password[0]}</p>
+						<p className='text-sm text-red-600'>
+							{errors.password.message}
+						</p>
 					)}
 				</div>
+
+				{/* Field Role */}
 				<div className='grid gap-1'>
-					<Label htmlFor='username'>Role</Label>
-					<Select
+					<Label htmlFor='role'>Role</Label>
+					<Controller
+						control={control}
 						name='role'
-						value={formData.role}
-						onValueChange={handleRoleChange}>
-						<SelectTrigger className='w-full'>
-							<SelectValue placeholder='Select role' />
-						</SelectTrigger>
-						<SelectContent>
-							{ROLES.map((role, index) => (
-								<SelectItem key={index} value={role}>
-									{role.charAt(0).toUpperCase() + role.slice(1)}
-								</SelectItem>
-							))}
-						</SelectContent>
-					</Select>
-					{errors.role && <p style={{ color: "red" }}>{errors.role[0]}</p>}
+						render={({ field }) => (
+							<Select
+								onValueChange={field.onChange}
+								defaultValue={field.value}>
+								<SelectTrigger>
+									<SelectValue placeholder='Select role' />
+								</SelectTrigger>
+								<SelectContent>
+									{ROLES.map((role) => (
+										<SelectItem key={role} value={role}>
+											{role}
+										</SelectItem>
+									))}
+								</SelectContent>
+							</Select>
+						)}
+					/>
+					{errors.role && (
+						<p className='text-sm text-red-600'>{errors.role.message}</p>
+					)}
 				</div>
 			</div>
+
 			<div className='flex flex-col gap-3'>
-				<Button type='submit' className='w-full bg-blue-600'>
-					Register
+				<Button
+					type='submit'
+					disabled={isSubmitting}
+					className='w-full bg-blue-600'>
+					{isSubmitting ? "Mendaftar..." : "Register"}
 				</Button>
 			</div>
+
 			<div className='text-center text-sm'>
-				Don&apos;t have an account?{" "}
+				Already have an account?{" "}
 				<Link
 					href='/login'
 					className='underline underline-offset-4 text-blue-600'>

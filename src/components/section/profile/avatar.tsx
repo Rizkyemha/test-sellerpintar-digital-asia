@@ -1,0 +1,1 @@
+// client komponen untuk avatar
