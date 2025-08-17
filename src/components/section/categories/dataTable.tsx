@@ -53,8 +53,6 @@ export function DataTable<TData, TValue>({
 		setSearchQuery(e.target.value);
 	};
 
-	console.log("DataTable categories", data);
-
 	return (
 		<>
 			<p className='w-full p-[24px] border-b bg-white border-slate/200'>

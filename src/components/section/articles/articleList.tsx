@@ -60,8 +60,6 @@ export function ArticlesContainer() {
 				});
 				setArticles(response.data);
 				setTotalArticles(response.total);
-				console.log("Fetched articles:", response.data);
-				console.log("Fetched articles:", response.total);
 			} catch (error) {
 				console.error("Failed to fetch articles:", error);
 			}
@@ -87,8 +85,6 @@ export function ArticlesContainer() {
 	}, []);
 
 	const pageCount = Math.ceil(totalArticles / pagination.limit);
-
-	console.log("pageCount:", pageCount);
 
 	const handleFirstPage = () => {
 		if (pagination.page > 1) {

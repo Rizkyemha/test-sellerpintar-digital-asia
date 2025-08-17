@@ -24,7 +24,6 @@ export default function Page() {
 		try {
 			await deleteCategory(id);
 			setCategories((prev) => prev.filter((category) => category.id !== id));
-			console.log("Category deleted successfully", id);
 		} catch (error) {
 			console.error("Failed to delete category:", error);
 		}

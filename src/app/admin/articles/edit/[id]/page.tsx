@@ -3,16 +3,13 @@ import { getCategories } from "@/src/services/cetegories";
 import ArticleFormLoader from "@/src/components/section/articles/articleFormLoader";
 import { BackButton } from "@/src/components/section/articles/backButton";
 
-export default async function ArticlePage({
-	params,
-}: {
-	params: { id: string };
-}) {
-	const { id } = await params;
+export default async function ArticlePage({ params }: any): Promise<any> {
+	const id = await params.id;
+
 	const article = await getArticleById(id);
 
 	const response = await getCategories();
-	const categories = response.data.data;
+	const categories = response?.data?.data || [];
 
 	if (!article) {
 		return <div>Artikel tidak ditemukan!</div>;

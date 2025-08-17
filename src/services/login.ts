@@ -30,7 +30,7 @@ export const register = async (credentials: {
 		const { id } = response.data;
 
 		if (id) {
-			console.log("Registrasi berhasil ", id);
+			console.info("Registrasi berhasil ", id);
 		}
 	} catch (error) {
 		console.error("Login gagal:", error);

@@ -31,7 +31,6 @@ export default function ArticlesPage() {
 		try {
 			await deleteArticle(id);
 			setArticles((prev) => prev.filter((article) => article.id !== id));
-			console.log("Article deleted successfully", id);
 		} catch (error) {
 			console.error("Failed to delete category:", error);
 		}

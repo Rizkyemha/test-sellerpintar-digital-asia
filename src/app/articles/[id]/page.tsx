@@ -29,7 +29,7 @@ export default function ArticleById() {
 				const articleData = await getArticleById(id);
 				setArticle(articleData);
 			} catch (error) {
-				console.log("Error with slug:", error);
+				console.error("Error with slug:", error);
 			}
 		};
 

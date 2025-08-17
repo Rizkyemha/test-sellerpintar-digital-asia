@@ -20,7 +20,6 @@ export default function RootLayout({
 			try {
 				const response = await getUser();
 				setUser(response);
-				console.log("User data fetched:", response);
 			} catch (error) {
 				console.error("Error fetching user:", error);
 			}
