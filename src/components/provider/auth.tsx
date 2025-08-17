@@ -55,7 +55,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 					router.push("/articles");
 				}
 			} else if (pathname.startsWith("/admin") && userRole !== "Admin") {
-				// belum buat page unauthorized
 				router.push("/login");
 			}
 		}

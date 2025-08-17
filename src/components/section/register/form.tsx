@@ -51,7 +51,6 @@ export function RegisterForm() {
 			noValidate
 			className='flex flex-col gap-6'>
 			<div className='flex flex-col gap-3'>
-				{/* Field Username */}
 				<div className='grid gap-2'>
 					<Label htmlFor='username'>Username</Label>
 					<Input
@@ -66,8 +65,6 @@ export function RegisterForm() {
 						</p>
 					)}
 				</div>
-
-				{/* Field Password */}
 				<div className='grid gap-2'>
 					<Label htmlFor='password'>Password</Label>
 					<div className='relative'>
@@ -90,8 +87,6 @@ export function RegisterForm() {
 						</p>
 					)}
 				</div>
-
-				{/* Field Role */}
 				<div className='grid gap-1'>
 					<Label htmlFor='role'>Role</Label>
 					<Controller

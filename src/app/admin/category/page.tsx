@@ -1,79 +1,74 @@
 "use client";
 
-import AddCategory from "@/src/components/section/admin/addCategoryForm";
+import { useState, useEffect } from "react";
+import { DataTable } from "@/src/components/section/categories/dataTable";
+import { columns } from "@/src/components/section/categories/columns";
+import { getCategories, deleteCategory } from "@/src/services/cetegories";
+import { useDebounce } from "@/src/hooks/useDebounce";
+import { Category } from "@/src/lib/schemas";
+import { PaginationState } from "@tanstack/react-table";
+import { createCategory } from "@/src/services/cetegories";
+import { set } from "zod";
 
-import {
-	AlertDialog,
-	AlertDialogAction,
-	AlertDialogCancel,
-	AlertDialogContent,
-	AlertDialogDescription,
-	AlertDialogFooter,
-	AlertDialogHeader,
-	AlertDialogTitle,
-	AlertDialogTrigger,
-} from "@/src/components/ui/alert-dialog";
-import { Button } from "@/src/components/ui/button";
+export default function Page() {
+	const [categories, setCategories] = useState<Category[]>([]);
 
-import { Input } from "@/src/components/ui/input";
-import { Label } from "@/src/components/ui/label";
+	const [isLoading, setIsLoading] = useState(true);
 
-import { Search } from "lucide-react";
-import { Plus } from "lucide-react";
+	const [totalCategories, setTotalCategories] = useState(0);
 
-export default function Category() {
+	const [searchQuery, setSearchQuery] = useState("");
+	const debouncedSearchQuery = useDebounce(searchQuery, 500);
+
+	const handleDelete = async (id: string) => {
+		try {
+			await deleteCategory(id);
+			setCategories((prev) => prev.filter((category) => category.id !== id));
+			console.log("Category deleted successfully", id);
+		} catch (error) {
+			console.error("Failed to delete category:", error);
+		}
+	};
+
+	const [pagination, setPagination] = useState<PaginationState>({
+		pageIndex: 0,
+		pageSize: 10,
+	});
+
+	useEffect(() => {
+		const fetchArticles = async () => {
+			setIsLoading(true);
+			try {
+				const response = await getCategories({
+					page: pagination.pageIndex + 1,
+					limit: pagination.pageSize,
+					search: debouncedSearchQuery,
+				});
+				setCategories(response.data.data);
+				setTotalCategories(response.data.totalData);
+			} catch (error) {
+				console.error("Gagal mengambil data artikel:", error);
+			} finally {
+				setIsLoading(false);
+			}
+		};
+
+		fetchArticles();
+	}, [pagination, debouncedSearchQuery]);
+
+	const pageCount = Math.ceil(totalCategories / pagination.pageSize);
 	return (
-		<>
-			<p className='w-full p-[24px] border-b bg-white border-slate/200'>
-				Total Articles : 6
-			</p>
-			<div className='flex justify-between w-full p-[24px] bg-white border-b border-slate/200'>
-				<div className='flex gap-[8px]'>
-					<Label className='hidden' htmlFor='search_category' />
-					<div className='relative'>
-						<Input
-							className='pl-8'
-							id='search_category'
-							name='search_category'
-							type='text'
-							placeholder='Search Category'
-						/>
-						<Search
-							className='absolute left-2 top-1/2 -translate-y-1/2 opacity-50 hover:opacity-100 hover:cursor-pointer'
-							size={20}
-						/>
-					</div>
-				</div>
-				<div>
-					<AlertDialog>
-						<AlertDialogTrigger asChild>
-							<Button className='bg-blue-600 px-[16px] py-2 hover:cursor-pointer'>
-								<Plus size={20} />
-								<p>Add category</p>
-							</Button>
-						</AlertDialogTrigger>
-						<AlertDialogContent className='w-[400px] gap-[16px]'>
-							<AlertDialogHeader>
-								<AlertDialogTitle className='pb-[20px]'>
-									Add category
-								</AlertDialogTitle>
-								<AlertDialogDescription>
-									{/* Disini input form */}
-									<AddCategory />
-								</AlertDialogDescription>
-							</AlertDialogHeader>
-							<AlertDialogFooter>
-								<AlertDialogCancel className='hover:cursor-pointer'>
-									Cancel
-								</AlertDialogCancel>
-								<AlertDialogAction className='bg-red-600 hover:cursor-pointer'>
-									Continue
-								</AlertDialogAction>
-							</AlertDialogFooter>
-						</AlertDialogContent>
-					</AlertDialog>
-				</div>
-			</div>
-		</>
+		<DataTable
+			columns={columns(handleDelete, setCategories)}
+			data={categories}
+			setData={setCategories}
+			isLoading={isLoading}
+			pageCount={pageCount}
+			pagination={pagination}
+			setPagination={setPagination}
+			searchQuery={searchQuery}
+			setSearchQuery={setSearchQuery}
+			totalCategories={totalCategories}
+		/>
 	);
 }

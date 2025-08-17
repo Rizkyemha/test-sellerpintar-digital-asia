@@ -1,3 +1,5 @@
+"use client";
+
 import { AdminNav } from "@/src/components/section/admin/nav";
 
 export default function RootLayout({

@@ -1,3 +1,5 @@
+"use client";
+
 import {
 	Avatar,
 	AvatarImage,
@@ -5,7 +7,12 @@ import {
 } from "@/src/components/ui/avatar";
 import Link from "next/link";
 
-export function AdminTopNav({ title }: { title: string }) {
+type User = {
+	username?: string;
+	role?: string;
+};
+
+export function AdminTopNav({ title, user }: { title: string; user: User }) {
 	return (
 		<div className='h-fit flex justify-between bg-gray-50 px-[24px] pt-[20px] pb-[16px] border-b'>
 			<h1 className='text-xl font-semibold'>{title}</h1>
@@ -14,7 +21,9 @@ export function AdminTopNav({ title }: { title: string }) {
 					<AvatarImage src='https://github.com/shadcn.png' />
 					<AvatarFallback>CN</AvatarFallback>
 				</Avatar>
-				<Link href='/admin/profile'>James Dean</Link>
+				<Link href='/admin/profile'>
+					{!user.username ? "user" : user.username}
+				</Link>
 			</div>
 		</div>
 	);

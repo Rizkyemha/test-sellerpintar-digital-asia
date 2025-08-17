@@ -24,8 +24,13 @@ export const RegisterSchema = z.object({
 export type TRegisterSchema = z.infer<typeof RegisterSchema>;
 
 export const LoginSchema = z.object({
-	username: z.string(),
-	password: z.string(),
+	username: z
+		.string()
+		.min(3, { message: "Username harus memiliki minimal 3 karakter." })
+		.max(20, { message: "Username tidak boleh lebih dari 20 karakter." }),
+	password: z
+		.string()
+		.min(6, { message: "Password harus memiliki minimal 6 karakter." }),
 });
 
 export type TLoginSchema = z.infer<typeof LoginSchema>;
@@ -40,7 +45,7 @@ export type Article = {
 	category: { name: string; id: string };
 };
 
-export interface DataTableProps<TData, TValue> {
+export interface DataTablePropsArticle<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[];
 	data: TData[];
 	categories: Category[];
@@ -55,9 +60,47 @@ export interface DataTableProps<TData, TValue> {
 	totalArticles: number;
 }
 
+export const thumbnailFileSchema = z.any().optional();
+
+export type ThumbnailFileSchema = z.infer<typeof thumbnailFileSchema>;
+
+export const articleSchema = z.object({
+	imageUrl: thumbnailFileSchema,
+	title: z.string().min(1, {
+		message: "Judul harus diisi.",
+	}),
+	categoryId: z.string().min(1, { message: "Silakan pilih kategori." }),
+	content: z.string().min(1, {
+		message: "Konten harus diisi.",
+	}),
+});
+
+export type ArticleFormData = z.infer<typeof articleSchema>;
+
 // CATEGORIES
 
 export type Category = {
 	id: string;
 	name: string;
+	createdAt: string;
+	setData?: React.Dispatch<React.SetStateAction<Category[]>>;
 };
+
+export const CategoryPayload = z.object({
+	name: z.string().min(1, { message: "Category field cannot be empty" }),
+});
+
+export type TCategoryPayload = z.infer<typeof CategoryPayload>;
+
+export interface DataTablePropsCategory<TData, TValue> {
+	columns: ColumnDef<TData, TValue>[];
+	data: TData[];
+	setData: Dispatch<SetStateAction<TData[]>>;
+	isLoading: boolean;
+	pageCount: number;
+	pagination: PaginationState;
+	setPagination: Dispatch<SetStateAction<PaginationState>>;
+	searchQuery: string;
+	setSearchQuery: (query: string) => void;
+	totalCategories: number;
+}

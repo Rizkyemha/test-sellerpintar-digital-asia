@@ -31,7 +31,7 @@ import { Plus } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
-import { DataTableProps } from "@/src/lib/schemas";
+import { DataTablePropsArticle } from "@/src/lib/schemas";
 
 export function DataTable<TData, TValue>({
 	columns,
@@ -46,7 +46,7 @@ export function DataTable<TData, TValue>({
 	selectedCategory,
 	setSelectedCategory,
 	totalArticles,
-}: DataTableProps<TData, TValue>) {
+}: DataTablePropsArticle<TData, TValue>) {
 	const table = useReactTable({
 		data,
 		columns,
@@ -178,18 +178,58 @@ export function DataTable<TData, TValue>({
 			</Table>
 			<div className='flex items-center justify-center space-x-2 py-4 bg-gray-50'>
 				<Button
+					className='bg-gray-50 border-0 shadow-none hover:bg-gray-50 hover:cursor-pointer hover:underline'
 					variant='outline'
 					size='sm'
 					onClick={() => table.previousPage()}
 					disabled={!table.getCanPreviousPage()}>
-					Previous
+					{"< "}Previous
 				</Button>
+
+				{pagination.pageIndex + 1 == pageCount && (
+					<Button
+						className='text-slate-900 bg-gray-50 border-0 shadow-none hover:bg-gray-50 hover:cursor-pointer hover:underline'
+						onClick={() => table.setPageIndex(0)}>
+						...
+					</Button>
+				)}
+				{pagination.pageIndex !== 0 && (
+					<Button
+						className='text-slate-900 bg-gray-50 border-0 shadow-none hover:bg-gray-50 hover:cursor-pointer hover:underline'
+						onClick={() => table.setPageIndex(pagination.pageIndex - 1)}>
+						{pagination.pageIndex}
+					</Button>
+				)}
+				<Button className='bg-white text-slate-900 border-slate-200 hover:bg-white hover:cursor-pointer'>
+					{pagination.pageIndex + 1}
+				</Button>
+
+				{pagination.pageIndex + 1 && pagination.pageIndex + 1 < 2 && (
+					<Button
+						className='text-slate-900 bg-gray-50 border-0 shadow-none hover:bg-gray-50 hover:cursor-pointer hover:underline'
+						onClick={() => table.setPageIndex(1)}>
+						{pagination.pageIndex + 2}
+					</Button>
+				)}
+				{pagination.pageIndex + 1 == pagination.pageIndex + 2 && (
+					<Button>{pagination.pageIndex + 2}</Button>
+				)}
+				{(pagination.pageIndex == 0 ||
+					pagination.pageIndex + 1 < pageCount) && (
+					<Button
+						className='text-slate-900 bg-gray-50 border-0 shadow-none hover:bg-gray-50 hover:cursor-pointer hover:underline'
+						onClick={() => table.setPageIndex(pageCount)}>
+						...
+					</Button>
+				)}
+
 				<Button
+					className='bg-gray-50 border-0 shadow-none hover:bg-gray-50 hover:cursor-pointer hover:underline'
 					variant='outline'
 					size='sm'
 					onClick={() => table.nextPage()}
 					disabled={!table.getCanNextPage()}>
-					Next
+					Next {" >"}
 				</Button>
 			</div>
 		</>

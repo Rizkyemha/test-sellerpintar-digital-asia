@@ -1,3 +1,3 @@
 export default function Profile() {
-	return <div>SEDANG DI PROFILE USER</div>;
+	return <div>SEDANG DI PROFILE USER </div>;
 }

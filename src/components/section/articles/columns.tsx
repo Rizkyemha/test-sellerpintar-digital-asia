@@ -20,7 +20,9 @@ import { Article } from "@/src/lib/schemas";
 import { formatDate } from "@/src/lib/utils";
 import Link from "next/link";
 
-export const columns: ColumnDef<Article>[] = [
+export const columns = (
+	handleDelete: (id: string) => void
+): ColumnDef<Article>[] => [
 	{
 		accessorKey: "thumbnailUrl",
 		header: "Thubmnail",
@@ -115,7 +117,7 @@ export const columns: ColumnDef<Article>[] = [
 									Cancel
 								</AlertDialogCancel>
 								<AlertDialogAction
-									// onClick={() => handleDelete(row.original.id)}
+									onClick={() => handleDelete(row.original.id)}
 									className='bg-red-600 hover:cursor-pointer'>
 									Continue
 								</AlertDialogAction>

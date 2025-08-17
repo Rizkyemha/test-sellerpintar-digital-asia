@@ -11,7 +11,6 @@ export default function AddCategory() {
 				placeholder='Input category'
 				required
 			/>
-			{/* {errors.role && <p style={{ color: "red" }}>{errors.role[0]}</p>} */}
 			<p className='text-red-500'>Category field cannot be empty</p>
 		</div>
 	);

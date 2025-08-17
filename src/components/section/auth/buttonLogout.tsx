@@ -1,14 +1,22 @@
 "use client";
 
 import { logout } from "@/src/services/login";
-import { redirect } from "next/navigation";
+import { useAuth } from "@/src/context/auth";
 
 export function ButtonLogout() {
+	const { setIsAuthenticated } = useAuth();
+
 	const logoutHandler = (e: React.MouseEvent) => {
 		e.preventDefault();
 		logout();
-		redirect("/login");
+		setIsAuthenticated(false);
 	};
 
-	return <button onClick={logoutHandler}>Logout</button>;
+	return (
+		<button
+			className='underline hover:cursor-pointer'
+			onClick={logoutHandler}>
+			Logout
+		</button>
+	);
 }

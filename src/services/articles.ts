@@ -3,6 +3,7 @@ import { apiClient } from "@/src/services";
 export interface GetArticlesParams {
 	title?: string;
 	category?: string;
+	categoryId?: string;
 	page?: number;
 	limit?: number;
 	sortOrder?: string;
@@ -22,7 +23,7 @@ export interface UpdateArticlePayload {
 	imageFile?: File;
 }
 
-const uploadImage = async (imageFile: File): Promise<string> => {
+export const uploadImage = async (imageFile: File): Promise<string> => {
 	const formData = new FormData();
 	formData.append("image", imageFile);
 
@@ -34,7 +35,6 @@ const uploadImage = async (imageFile: File): Promise<string> => {
 		});
 		return response.data.imageUrl;
 	} catch (error) {
-		console.error("Gagal mengunggah gambar:", error);
 		throw new Error("Upload gambar gagal.");
 	}
 };
@@ -44,7 +44,6 @@ export const getArticles = async (params: GetArticlesParams = {}) => {
 		const response = await apiClient.get("/articles", { params });
 		return response.data;
 	} catch (error) {
-		console.error("Gagal mengambil daftar artikel:", error);
 		throw error;
 	}
 };
@@ -54,7 +53,6 @@ export const getArticleById = async (id: string) => {
 		const response = await apiClient.get(`/articles/${id}`);
 		return response.data;
 	} catch (error) {
-		console.error(`Gagal mengambil artikel dengan ID ${id}:`, error);
 		throw error;
 	}
 };
@@ -73,7 +71,6 @@ export const createArticle = async (payload: CreateArticlePayload) => {
 		const response = await apiClient.post("/articles", articleData);
 		return response.data;
 	} catch (error) {
-		console.error("Gagal membuat artikel:", error);
 		throw error;
 	}
 };
@@ -99,7 +96,6 @@ export const updateArticle = async (
 		const response = await apiClient.put(`/articles/${id}`, articleData);
 		return response.data;
 	} catch (error) {
-		console.error(`Gagal memperbarui artikel dengan ID ${id}:`, error);
 		throw error;
 	}
 };
@@ -109,7 +105,6 @@ export const deleteArticle = async (id: string) => {
 		const response = await apiClient.delete(`/articles/${id}`);
 		return response.data;
 	} catch (error) {
-		console.error(`Gagal menghapus artikel dengan ID ${id}:`, error);
 		throw error;
 	}
 };

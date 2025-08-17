@@ -44,11 +44,9 @@ export function AdminNav() {
 					<p>Category</p>
 				</Link>
 				<AlertDialog>
-					<AlertDialogTrigger asChild>
-						<button className='flex items-center gap-[12px] py-[8px] px-[16px] hover:bg-blue-500 hover:cursor-pointer'>
-							<LogOut size={20} />
-							<p>Logout</p>
-						</button>
+					<AlertDialogTrigger className='flex items-center gap-[12px] py-[8px] px-[16px] hover:bg-blue-500 hover:cursor-pointer'>
+						<LogOut size={20} />
+						<p>Logout</p>
 					</AlertDialogTrigger>
 					<AlertDialogContent className='w-[400px] gap-[16px]'>
 						<AlertDialogHeader>

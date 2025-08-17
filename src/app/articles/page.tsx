@@ -1,8 +1,11 @@
+"use client";
+
+import { ArticlesContainer } from "@/src/components/section/articles/articleList";
+
 export default function Articles() {
 	return (
-		<div>
-			<h1 className='text-2xl font-bold'>Menampilkan Artikel:</h1>
-			<p className='mt-4 text-lg'>Ini daftar artikel</p>
+		<div className='w-full flex flex-col items-center justify-beetween'>
+			<ArticlesContainer />
 		</div>
 	);
 }

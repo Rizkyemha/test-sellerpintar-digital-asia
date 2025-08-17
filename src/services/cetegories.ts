@@ -18,7 +18,7 @@ export const getCategories = async (params: GetCategoriesParams = {}) => {
 			(category: { id: string }) => category.id && category.id !== ""
 		);
 		return {
-			data: filteredList,
+			data: { ...response.data, data: filteredList },
 		};
 	} catch (error) {
 		console.error("Gagal mengambil daftar kategori:", error);
