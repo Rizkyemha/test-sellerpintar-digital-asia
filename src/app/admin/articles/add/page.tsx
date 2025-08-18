@@ -8,7 +8,7 @@ export default async function ArticlePage() {
 
 	return (
 		<div className='bg-gray-50 rounded-lg'>
-			<BackButton name='Edit article' />
+			<BackButton name='Create article' />
 			<ArticleFormLoader categories={categories} />
 		</div>
 	);
