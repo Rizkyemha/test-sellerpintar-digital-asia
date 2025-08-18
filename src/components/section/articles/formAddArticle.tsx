@@ -5,6 +5,7 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { articleSchema, ArticleFormData } from "@/src/lib/schemas";
 import { updateArticle, createArticle } from "@/src/services/articles";
+import { useRouter } from "next/navigation";
 
 import { Input } from "@/src/components/ui/input";
 import { Label } from "@/src/components/ui/label";
@@ -56,6 +57,8 @@ export function ArticleForm({
 		resolver: zodResolver(articleSchema),
 	});
 
+	const router = useRouter();
+
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
 	const imageFile = watch("imageUrl");
 	const [imagePreview, setImagePreview] = useState<string | null>(
@@ -99,9 +102,11 @@ export function ArticleForm({
 			if (article && article.id) {
 				await updateArticle(article.id, articlePayload);
 				alert("Artikel berhasil diperbarui!");
+				router.push("/admin/articles");
 			} else {
 				await createArticle(articlePayload);
 				alert("Artikel berhasil dibuat!");
+				router.push("/admin/articles");
 			}
 		} catch (error) {
 			console.error("Gagal memperbarui artikel:", error);

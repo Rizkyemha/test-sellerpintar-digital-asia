@@ -32,6 +32,11 @@ export function AddCategory({
 						<AlertDialogCancel className='hover:cursor-pointer'>
 							Cancel
 						</AlertDialogCancel>
+						<AlertDialogCancel
+							type='submit'
+							className='bg-blue-600 hover:cursor-pointer text-white'>
+							Submit
+						</AlertDialogCancel>
 					</FormCategory>
 				</AlertDialogContent>
 			</AlertDialog>

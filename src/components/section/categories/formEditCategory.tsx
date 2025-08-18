@@ -34,7 +34,9 @@ export function FormEditCategory({
 			const response = await updateCategory(categoryData.id as string, {
 				name: data.name,
 			});
-			setData((prev) => [response, ...prev]);
+			setData((prev) =>
+				prev.map((item) => (item.id === response.id ? response : item))
+			);
 		} catch (error) {
 			alert("Username atau password salah!");
 		}
