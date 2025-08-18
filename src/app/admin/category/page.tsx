@@ -56,6 +56,7 @@ export default function Page() {
 	}, [pagination, debouncedSearchQuery]);
 
 	const pageCount = Math.ceil(totalCategories / pagination.pageSize);
+
 	return (
 		<DataTable
 			columns={columns(handleDelete, setCategories)}

@@ -186,36 +186,35 @@ export function DataTable<TData, TValue>({
 					{"< "}Previous
 				</Button>
 
-				{pagination.pageIndex + 1 == pageCount && (
+				{pageCount >= 3 && pagination.pageIndex + 1 == pageCount && (
 					<Button
 						className='text-slate-900 bg-gray-50 border-0 shadow-none hover:bg-gray-50 hover:cursor-pointer hover:underline'
 						onClick={() => table.setPageIndex(0)}>
 						...
 					</Button>
 				)}
-				{pagination.pageIndex !== 0 && (
+
+				{pageCount >= 2 && pagination.pageIndex + 1 > 1 && (
 					<Button
 						className='text-slate-900 bg-gray-50 border-0 shadow-none hover:bg-gray-50 hover:cursor-pointer hover:underline'
-						onClick={() => table.setPageIndex(pagination.pageIndex - 1)}>
+						onClick={() => table.previousPage()}>
 						{pagination.pageIndex}
 					</Button>
 				)}
+
 				<Button className='bg-white text-slate-900 border-slate-200 hover:bg-white hover:cursor-pointer'>
 					{pagination.pageIndex + 1}
 				</Button>
 
-				{pagination.pageIndex + 1 && pagination.pageIndex + 1 < 2 && (
+				{pageCount >= 2 && pagination.pageIndex + 1 < 2 && (
 					<Button
 						className='text-slate-900 bg-gray-50 border-0 shadow-none hover:bg-gray-50 hover:cursor-pointer hover:underline'
-						onClick={() => table.setPageIndex(1)}>
+						onClick={() => table.nextPage()}>
 						{pagination.pageIndex + 2}
 					</Button>
 				)}
-				{pagination.pageIndex + 1 == pagination.pageIndex + 2 && (
-					<Button>{pagination.pageIndex + 2}</Button>
-				)}
-				{(pagination.pageIndex == 0 ||
-					pagination.pageIndex + 1 < pageCount) && (
+
+				{pageCount >= 3 && pagination.pageIndex + 1 <= pageCount - 1 && (
 					<Button
 						className='text-slate-900 bg-gray-50 border-0 shadow-none hover:bg-gray-50 hover:cursor-pointer hover:underline'
 						onClick={() => table.setPageIndex(pageCount)}>

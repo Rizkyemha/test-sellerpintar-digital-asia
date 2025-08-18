@@ -78,6 +78,8 @@ export default function ArticlesPage() {
 
 	const pageCount = Math.ceil(totalArticles / pagination.pageSize);
 
+	console.log(pageCount);
+
 	return (
 		<>
 			<DataTable

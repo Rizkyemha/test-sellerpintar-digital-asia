@@ -196,16 +196,15 @@ export function ArticlesContainer() {
 					{"< "}Previous
 				</Button>
 
-				{pagination.page == pageCount && (
+				{pageCount >= 3 && pagination.page == pageCount && (
 					<Button
 						className='text-slate-900 bg-white border-0 shadow-none hover:bg-gray-50 hover:cursor-pointer hover:underline'
 						onClick={() => handleFirstPage()}>
-						{" "}
-						...{" "}
+						...
 					</Button>
 				)}
 
-				{pagination.page <= pageCount && pagination.page > 1 && (
+				{pageCount >= 2 && pagination.page > 1 && (
 					<Button
 						className='text-slate-900 bg-white border-0 shadow-none hover:bg-gray-50 hover:cursor-pointer hover:underline'
 						onClick={() => handlePreviousPage()}>
@@ -217,7 +216,7 @@ export function ArticlesContainer() {
 					{pagination.page}
 				</Button>
 
-				{pagination.page + 1 == 2 && (
+				{pageCount >= 2 && pagination.page + 1 == 2 && (
 					<Button
 						className='text-slate-900 bg-white border-0 shadow-none hover:bg-gray-50 hover:cursor-pointer hover:underline'
 						onClick={() => handleNextPage()}>
@@ -225,12 +224,11 @@ export function ArticlesContainer() {
 					</Button>
 				)}
 
-				{pagination.page < pageCount && pagination.page !== pageCount && (
+				{pageCount >= 3 && pagination.page != pageCount && (
 					<Button
 						className='text-slate-900 bg-white border-0 shadow-none hover:bg-gray-50 hover:cursor-pointer hover:underline'
 						onClick={() => handleLastPage()}>
-						{" "}
-						...{" "}
+						...
 					</Button>
 				)}
 
