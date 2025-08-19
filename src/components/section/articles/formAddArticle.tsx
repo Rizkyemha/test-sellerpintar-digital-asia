@@ -271,7 +271,7 @@ export function ArticleForm({
 					<p className='text-sm text-red-500'>{errors.content.message}</p>
 				)}
 			</div>
-			<div className='flex justify-end gap-4'>
+			<div className='flex flex-wrap justify-end gap-4 pb-5'>
 				<Button type='button' variant='outline'>
 					Cancel
 				</Button>
@@ -281,7 +281,10 @@ export function ArticleForm({
 					variant='outline'>
 					Preview
 				</Button>
-				<Button type='submit' disabled={isSubmitting}>
+				<Button
+					className='bg-blue-500'
+					type='submit'
+					disabled={isSubmitting}>
 					{isSubmitting ? "Uploading..." : "Upload"}
 				</Button>
 			</div>

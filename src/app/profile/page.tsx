@@ -9,7 +9,7 @@ export default function Profile() {
 	console.log(role);
 
 	return (
-		<div className='flex items-center justify-center p-6'>
+		<div className='flex items-center justify-center p-6 bg-blue'>
 			<UserProfile username={username ?? ""} role={role ?? ""} />
 		</div>
 	);

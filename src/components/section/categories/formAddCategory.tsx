@@ -47,7 +47,7 @@ export function FormCategory({
 			{errors.name && (
 				<p className='text-sm text-red-600'>{errors.name.message}</p>
 			)}
-			<div className='flex justify-baseline'>{children}</div>
+			<div className='flex justify-end pt-5 gap-2'>{children}</div>
 		</form>
 	);
 }

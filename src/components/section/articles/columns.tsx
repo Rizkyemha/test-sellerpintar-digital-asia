@@ -77,7 +77,7 @@ export const columns = (
 		header: "Action",
 		cell: ({ row }) => {
 			return (
-				<div className='flex gap-2'>
+				<div className='flex flex-wrap gap-2 justify-center gap-y-0'>
 					<Button
 						variant='link'
 						className='px-0 underline hover:cursor-pointer'>

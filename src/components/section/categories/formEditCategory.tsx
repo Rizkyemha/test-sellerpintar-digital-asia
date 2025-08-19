@@ -49,15 +49,7 @@ export function FormEditCategory({
 			{errors.name && (
 				<p className='text-sm text-red-600'>{errors.name.message}</p>
 			)}
-			<div className='flex justify-baseline'>
-				{children}
-				<Button
-					data-slot='Cancel'
-					type='submit'
-					className='bg-blue-600 hover:cursor-pointer'>
-					Add
-				</Button>
-			</div>
+			<div className='flex justify-end pt-5 gap-2'>{children}</div>
 		</form>
 	);
 }

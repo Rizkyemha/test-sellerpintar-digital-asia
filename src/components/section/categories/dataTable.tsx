@@ -58,7 +58,7 @@ export function DataTable<TData, TValue>({
 			<p className='w-full p-[24px] border-b bg-white border-slate/200'>
 				Total Categories : {totalCategories}
 			</p>
-			<div className='flex justify-between w-full p-[24px] bg-white border-b border-slate/200'>
+			<div className='flex flex-col gap-2 sm:flex-row justify-between w-full p-[24px] bg-white border-b border-slate/200'>
 				<div className='flex gap-[8px]'>
 					<Label className='hidden' htmlFor='search' />
 					<div className='relative'>
@@ -136,7 +136,7 @@ export function DataTable<TData, TValue>({
 					)}
 				</TableBody>
 			</Table>
-			<div className='flex items-center justify-center space-x-2 py-4 bg-gray-50'>
+			<div className='flex flex-col sm:flex-row items-center justify-center space-x-2 py-4 bg-gray-50'>
 				<Button
 					className='bg-gray-50 border-0 shadow-none hover:bg-gray-50 hover:cursor-pointer hover:underline'
 					variant='outline'
@@ -146,41 +146,43 @@ export function DataTable<TData, TValue>({
 					{"< "}Previous
 				</Button>
 
-				{pageCount >= 3 && pagination.pageIndex + 1 == pageCount && (
-					<Button
-						className='text-slate-900 bg-gray-50 border-0 shadow-none hover:bg-gray-50 hover:cursor-pointer hover:underline'
-						onClick={() => table.setPageIndex(0)}>
-						...
-					</Button>
-				)}
+				<div className='flex items-center'>
+					{pageCount >= 3 && pagination.pageIndex + 1 == pageCount && (
+						<Button
+							className='text-slate-900 bg-gray-50 border-0 shadow-none hover:bg-gray-50 hover:cursor-pointer hover:underline'
+							onClick={() => table.setPageIndex(0)}>
+							...
+						</Button>
+					)}
 
-				{pageCount >= 2 && pagination.pageIndex + 1 > 1 && (
-					<Button
-						className='text-slate-900 bg-gray-50 border-0 shadow-none hover:bg-gray-50 hover:cursor-pointer hover:underline'
-						onClick={() => table.previousPage()}>
-						{pagination.pageIndex}
-					</Button>
-				)}
+					{pageCount >= 2 && pagination.pageIndex + 1 > 1 && (
+						<Button
+							className='text-slate-900 bg-gray-50 border-0 shadow-none hover:bg-gray-50 hover:cursor-pointer hover:underline'
+							onClick={() => table.previousPage()}>
+							{pagination.pageIndex}
+						</Button>
+					)}
 
-				<Button className='bg-white text-slate-900 border-slate-200 hover:bg-white hover:cursor-pointer'>
-					{pagination.pageIndex + 1}
-				</Button>
-
-				{pageCount >= 2 && pagination.pageIndex + 1 < 2 && (
-					<Button
-						className='text-slate-900 bg-gray-50 border-0 shadow-none hover:bg-gray-50 hover:cursor-pointer hover:underline'
-						onClick={() => table.nextPage()}>
-						{pagination.pageIndex + 2}
+					<Button className='bg-white text-slate-900 border-slate-200 hover:bg-white hover:cursor-pointer'>
+						{pagination.pageIndex + 1}
 					</Button>
-				)}
 
-				{pageCount >= 3 && pagination.pageIndex + 1 <= pageCount - 1 && (
-					<Button
-						className='text-slate-900 bg-gray-50 border-0 shadow-none hover:bg-gray-50 hover:cursor-pointer hover:underline'
-						onClick={() => table.setPageIndex(pageCount)}>
-						...
-					</Button>
-				)}
+					{pageCount >= 2 && pagination.pageIndex + 1 < 2 && (
+						<Button
+							className='text-slate-900 bg-gray-50 border-0 shadow-none hover:bg-gray-50 hover:cursor-pointer hover:underline'
+							onClick={() => table.nextPage()}>
+							{pagination.pageIndex + 2}
+						</Button>
+					)}
+
+					{pageCount >= 3 && pagination.pageIndex + 1 <= pageCount - 1 && (
+						<Button
+							className='text-slate-900 bg-gray-50 border-0 shadow-none hover:bg-gray-50 hover:cursor-pointer hover:underline'
+							onClick={() => table.setPageIndex(pageCount)}>
+							...
+						</Button>
+					)}
+				</div>
 
 				<Button
 					className='bg-gray-50 border-0 shadow-none hover:bg-gray-50 hover:cursor-pointer hover:underline'

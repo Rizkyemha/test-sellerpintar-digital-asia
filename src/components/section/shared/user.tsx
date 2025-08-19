@@ -23,7 +23,7 @@ export function UserProfile({ username, role }: UserProfileProps) {
 	};
 
 	return (
-		<div className='w-[400px] bg-blue flex flex-col gap-9 items-center justify-center px-4 py-6'>
+		<div className='w-[300px] sm:w-[400px] bg-blue flex flex-col gap-9 items-center justify-center px-4 py-6'>
 			<h3 className='font-semibold text-[20px]'>User Profile</h3>
 			<div className='flex flex-col gap-6 w-full'>
 				<Avatar className='w-[68px] h-[68px] mx-auto'>
