@@ -1,3 +1,16 @@
+"use client";
+
+import { UserProfile } from "@/src/components/section/shared/user";
+import { useUser } from "@/src/context/user";
+
 export default function Profile() {
-	return <div>SEDANG DI PROFILE USER </div>;
+	const { username, role } = useUser();
+
+	console.log(role);
+
+	return (
+		<div className='flex items-center justify-center p-6'>
+			<UserProfile username={username ?? ""} role={role ?? ""} />
+		</div>
+	);
 }

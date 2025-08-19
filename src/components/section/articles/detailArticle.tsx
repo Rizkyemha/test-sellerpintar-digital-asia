@@ -3,6 +3,7 @@ import { Dot } from "lucide-react";
 import { ArticleBody } from "./articleContent";
 
 export function DetailArticle({ article }: { article: any }) {
+	console.log("createdAt", article.title);
 	return (
 		<div className='w-full flex flex-col items-center justify-center gap-6 px-5 py-10 md:px-[80px] lg:px-[180px] md:gap-8 lg:gap-10'>
 			<div className='flex flex-col items-center gap-4'>

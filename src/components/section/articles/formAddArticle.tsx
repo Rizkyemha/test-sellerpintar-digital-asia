@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { articleSchema, ArticleFormData } from "@/src/lib/schemas";
 import { updateArticle, createArticle } from "@/src/services/articles";
 import { useRouter } from "next/navigation";
+import { readFileAsDataURL } from "@/src/lib/fileReader";
 
 import { Input } from "@/src/components/ui/input";
 import { Label } from "@/src/components/ui/label";
@@ -21,6 +22,7 @@ import dynamic from "next/dynamic";
 import { useState, useEffect, useRef } from "react";
 
 import { processAndUploadImages } from "@/src/lib/imageProcessor";
+import { useUser } from "@/src/context/user";
 
 export function ArticleForm({
 	article,
@@ -39,6 +41,8 @@ export function ArticleForm({
 			),
 		[]
 	);
+
+	const { username } = useUser();
 
 	const {
 		register,
@@ -112,6 +116,33 @@ export function ArticleForm({
 			console.error("Gagal memperbarui artikel:", error);
 			alert("Gagal memperbarui artikel.");
 		}
+	};
+
+	const onPreview = async (data: ArticleFormData) => {
+		const articlePayload: any = {
+			article: {
+				title: data.title,
+				content: data.content,
+				user: {
+					username: username,
+				},
+				createdAt: new Date(),
+				imageUrl: article.imageUrl,
+			},
+		};
+
+		if (data.imageUrl && data.imageUrl.length > 0) {
+			try {
+				const file = await data.imageUrl[0];
+				const Dataurl = await readFileAsDataURL(file);
+				articlePayload.article.imageUrl = Dataurl;
+			} catch (error) {
+				console.error("Gagal memproses gambar:", error);
+			}
+		}
+
+		sessionStorage.setItem("previewData", JSON.stringify(articlePayload));
+		router.push("/articles/preview");
 	};
 
 	return (
@@ -244,7 +275,10 @@ export function ArticleForm({
 				<Button type='button' variant='outline'>
 					Cancel
 				</Button>
-				<Button type='button' variant='secondary'>
+				<Button
+					onClick={handleSubmit(onPreview)}
+					type='button'
+					variant='outline'>
 					Preview
 				</Button>
 				<Button type='submit' disabled={isSubmitting}>

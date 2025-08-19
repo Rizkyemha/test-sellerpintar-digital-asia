@@ -10,8 +10,8 @@ export const login = async (credentials: {
 		const { token, role } = response.data;
 
 		if (token && role) {
-			sessionStorage.setItem("authToken", token);
-			sessionStorage.setItem("role", role);
+			localStorage.setItem("authToken", token);
+			localStorage.setItem("role", role);
 		}
 	} catch (error) {
 		console.error("Login gagal:", error);
@@ -39,6 +39,6 @@ export const register = async (credentials: {
 };
 
 export const logout = () => {
-	sessionStorage.removeItem("authToken");
-	sessionStorage.removeItem("role");
+	localStorage.removeItem("authToken");
+	localStorage.removeItem("role");
 };
