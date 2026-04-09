@@ -9,12 +9,18 @@ export function CardArticle({ article }: { article: any }) {
 	return (
 		<div className='flex flex-col gap-2'>
 			<div className='relative w-full rounded-[12px] h-[200px] md:h-[240px] flex items-center justify-center overflow-hidden bg-gray-50'>
-				<img
-					className='absolute w-full rounded-[12px] h-full object-cover hover:scale-110 transition-transform duration-200'
-					src={article.imageUrl}
-					alt={article.title}
-					loading='lazy'
-				/>
+				{!article.imageUrl ? (
+					<div className='absolute w-full rounded-[12px] h-full object-cover hover:scale-110 transition-transform duration-200'>
+						tes
+					</div>
+				) : (
+					<img
+						className='bg-blue-300 absolute w-full rounded-[12px] h-full object-cover hover:scale-110 transition-transform duration-200'
+						src={article.imageUrl}
+						alt={article.title}
+						loading='lazy'
+					/>
+				)}
 			</div>
 			<p className='text-gray-500 text-[14px]'>
 				{formatDate(article.createdAt, "MMMM dd, yyyy")}

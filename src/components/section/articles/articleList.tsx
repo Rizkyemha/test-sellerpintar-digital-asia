@@ -180,67 +180,73 @@ export function ArticlesContainer() {
 				</div>
 			</div>
 			<div className='w-full grid grid-cols-1 gap-6 px-5 pt-10 pb-[60px] sm:px-[60px] lg:px-[100px] sm:grid-cols-2 lg:grid-cols-3 lg:gap-y-[60px] lg:gap-x-[40px]'>
-				{articles.map((article) => (
-					<Link href={`/articles/${article.id}`} key={article.id}>
-						<CardArticle key={article.id} article={article} />
-					</Link>
-				))}
+				{articles.length == 0 ? (
+					<div className='text-center'>No articles found</div>
+				) : (
+					articles.map((article) => (
+						<Link href={`/articles/${article.id}`} key={article.id}>
+							<CardArticle key={article.id} article={article} />
+						</Link>
+					))
+				)}
 			</div>
-			<div className='flex items-center justify-center space-x-2 py-4'>
-				<Button
-					className='border-0 shadow-none bg-white hover:bg-gray-50 hover:cursor-pointer hover:underline'
-					variant='outline'
-					size='sm'
-					onClick={() => handlePreviousPage()}
-					disabled={pagination.page == 1}>
-					{"< "}Previous
-				</Button>
-
-				{pageCount >= 3 && pagination.page == pageCount && (
+			{articles.length !== 0 && (
+				<div className='flex items-center justify-center space-x-2 py-4'>
 					<Button
-						className='text-slate-900 bg-white border-0 shadow-none hover:bg-gray-50 hover:cursor-pointer hover:underline'
-						onClick={() => handleFirstPage()}>
-						...
+						className='border-0 shadow-none bg-white hover:bg-gray-50 hover:cursor-pointer hover:underline'
+						variant='outline'
+						size='sm'
+						onClick={() => handlePreviousPage()}
+						disabled={pagination.page == 1}>
+						{"< "}Previous
 					</Button>
-				)}
 
-				{pageCount >= 2 && pagination.page > 1 && (
+					{pageCount >= 3 && pagination.page == pageCount && (
+						<Button
+							className='text-slate-900 bg-white border-0 shadow-none hover:bg-gray-50 hover:cursor-pointer hover:underline'
+							onClick={() => handleFirstPage()}>
+							...
+						</Button>
+					)}
+
+					{pageCount >= 2 && pagination.page > 1 && (
+						<Button
+							className='text-slate-900 bg-white border-0 shadow-none hover:bg-gray-50 hover:cursor-pointer hover:underline'
+							onClick={() => handlePreviousPage()}>
+							{pagination.page - 1}
+						</Button>
+					)}
+
+					<Button className='bg-white text-slate-900 border-slate-200 border-1 hover:bg-white hover:cursor-pointer'>
+						{pagination.page}
+					</Button>
+
+					{pageCount >= 2 && pagination.page + 1 == 2 && (
+						<Button
+							className='text-slate-900 bg-white border-0 shadow-none hover:bg-gray-50 hover:cursor-pointer hover:underline'
+							onClick={() => handleNextPage()}>
+							{pagination.page + 1}
+						</Button>
+					)}
+
+					{pageCount >= 3 && pagination.page != pageCount && (
+						<Button
+							className='text-slate-900 bg-white border-0 shadow-none hover:bg-gray-50 hover:cursor-pointer hover:underline'
+							onClick={() => handleLastPage()}>
+							...
+						</Button>
+					)}
+
 					<Button
-						className='text-slate-900 bg-white border-0 shadow-none hover:bg-gray-50 hover:cursor-pointer hover:underline'
-						onClick={() => handlePreviousPage()}>
-						{pagination.page - 1}
+						className='bg-white border-0 shadow-none hover:bg-gray-50 hover:cursor-pointer hover:underline'
+						variant='outline'
+						size='sm'
+						onClick={() => handleNextPage()}
+						disabled={pagination.page == pageCount}>
+						Next {" >"}
 					</Button>
-				)}
-
-				<Button className='bg-white text-slate-900 border-slate-200 border-1 hover:bg-white hover:cursor-pointer'>
-					{pagination.page}
-				</Button>
-
-				{pageCount >= 2 && pagination.page + 1 == 2 && (
-					<Button
-						className='text-slate-900 bg-white border-0 shadow-none hover:bg-gray-50 hover:cursor-pointer hover:underline'
-						onClick={() => handleNextPage()}>
-						{pagination.page + 1}
-					</Button>
-				)}
-
-				{pageCount >= 3 && pagination.page != pageCount && (
-					<Button
-						className='text-slate-900 bg-white border-0 shadow-none hover:bg-gray-50 hover:cursor-pointer hover:underline'
-						onClick={() => handleLastPage()}>
-						...
-					</Button>
-				)}
-
-				<Button
-					className='bg-white border-0 shadow-none hover:bg-gray-50 hover:cursor-pointer hover:underline'
-					variant='outline'
-					size='sm'
-					onClick={() => handleNextPage()}
-					disabled={pagination.page == pageCount}>
-					Next {" >"}
-				</Button>
-			</div>
+				</div>
+			)}
 		</>
 	);
 }
